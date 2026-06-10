@@ -12,6 +12,8 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 import static cababo2000.CEUtils.StringUtils.*;
@@ -21,21 +23,20 @@ import static cababo2000.CEUtils.StringUtils.*;
  */
 public class Card implements Comparable<Card>{
     // Identifier, Name, Type, Description, Attack, Starting Health, Blood
-    private String identifier;
-    private String name;
-    private String type;
-    private String desc;
-    private String atk;
-    private String shp;
-    private String bld;
-    private String author;
+    private String[] data = new String[7];
 
     /*
          Constructors
     */
 
     public Card() {
-        this("Null", "", "", "", 0, 0, 0);
+        this.data[0] = "NULL";
+        this.data[1] = "Name";
+        this.data[2] = "Type";
+        this.data[3] = "Desc";
+        this.data[4] = "0";
+        this.data[5] = "0";
+        this.data[6] = "0";
     }
     public Card(String id, String name, String type, String desc, int hp, int atk, int bld){
         setData(id, name, type, desc, hp, atk, bld);
@@ -53,7 +54,7 @@ public class Card implements Comparable<Card>{
     public void saveCardData(){
         Gson jsonout = new GsonBuilder().setPrettyPrinting().create();
         try {
-            PrintStream output = new PrintStream(new File(identifier + ".json"));
+            PrintStream output = new PrintStream(new File(this.data[0] + ".json"));
             String printout = new String(jsonout.toJson(this));
 
             output.println(printout);
@@ -138,10 +139,9 @@ public class Card implements Comparable<Card>{
 
             g2.setFont(new Font("basis33", Font.BOLD, 45));
             g2.setColor(Color.WHITE);
-            for (int i = 0; i < 12; i++) {
-                g2.drawString(textWrap(getDesc(), 34, 12, true)[i], 235, 853 + (i * 45));
+            for (int i = 0; i < (textWrap(getDesc(), 31).size()); i++) {
+                g2.drawString(textWrap(getDesc(), 31).get(i), 235, 853 + (i * 45));
             }
-
             g2.setFont(new Font("Born2bSportyV2", 0, 34));
             g2.drawString(crudeCenterAlign(getType(), 68), 110, 120);
 
@@ -172,67 +172,55 @@ public class Card implements Comparable<Card>{
     */
 
     public void setData(String id, String name, String type, String desc, int hp, int atk, int bld){
-        this.identifier = id;
-        this.name = name;
-        this.type = type;
-        this.desc = desc;
-        if(atk < 0){
-            this.atk = "" + 0;
-        } else{
-            this.atk = "" + atk;
-        }
-        if(hp < 0){
-            this.shp = "" + 0;
-        }else{
-            this.shp = "" + hp;
-        }
-        if(bld < 0){
-            this.bld = "" + 0;
-        }else{
-            this.bld = "" + bld;
-        }
+        this.data[0] = id;
+        this.data[1] = name;
+        this.data[2] = type;
+        this.data[3] = desc;
+        this.data[4] = hp + "";
+        this.data[5] = atk + "";
+        this.data[6] = bld + "";
     }
 
     public void setName(String name){
         if(name == null){
-            this.name = "";
+            this.data[1] = "";
         } else{
-            this.name = name;
+            this.data[1] = name;
         }
     }
     public void setType(String type){
         if(type == null){
-            this.type = "";
+            this.data[2] = "";
         } else{
-            this.type = type;
+            this.data[2] = type;
         }
     }
     public void setDesc(String desc){
         if(desc == null){
-            this.desc = "";
+            this.data[3] = "";
         } else{
-            this.desc = desc;
+            this.data[3] = desc;
         }
     }
     public void setATK(int atk){
         if(atk > 0){
-            this.atk = "" + 0;
+            this.data[4] = "" + 0;
         } else{
-            this.atk = "" + atk;
+            this.data[4] = "" + atk;
         }
     }
     public void setHP(int hp){
         if(hp > 0){
-            this.shp = "" + 0;
+            this.data[5] = "" + 0;
         } else{
-            this.shp = "" + hp;
+            this.data[5] = "" + hp;
         }
     }
     public void setBLD(int bld){
         if(bld > 0){
-            this.bld = "" + 0;
+            this.data[6] = "" + 0;
         } else{
-            this.bld = "" + bld;
+            this.data[6] = "" + bld;
         }
     }
 
@@ -242,71 +230,71 @@ public class Card implements Comparable<Card>{
 
     public String[] getData(){
         String[] copyData = new String[7];
-        copyData[0] = this.identifier;
-        copyData[1] = this.name;
-        copyData[2] = this.type;
-        copyData[3] = this.desc;
-        copyData[4] = this.atk;
-        copyData[5] = this.shp;
-        copyData[6] = this.bld;
+        copyData[0] = this.data[0];
+        copyData[1] = this.data[1];
+        copyData[2] = this.data[2];
+        copyData[3] = this.data[3];
+        copyData[4] = this.data[4];
+        copyData[5] = this.data[5];
+        copyData[6] = this.data[6];
 
         return copyData;
     }
 
     public String getID() {
         //Check if the Identifier is Null
-        if(this.identifier == null || this.identifier.length() == 0) {
+        if(this.data[0] == null || this.data[0].isEmpty()) {
             return "Null";
         }
 
-        return this.identifier;
+        return this.data[0];
     }
     public String getName() {
         //Check if the Name is Null
-        if(this.name == null || this.name.length() == 0) {
+        if(this.data[1] == null || this.data[1].isEmpty()) {
             return "Null";
         }
 
-        return this.name;
+        return this.data[1];
     }
     public String getType() {
         //Check if the Type is Null
-        if(this.type == null || this.type.length() == 0) {
+        if(this.data[2] == null || this.data[2].isEmpty()) {
             return "Null";
         }
 
-        return this.type;
+        return this.data[2];
     }
     public String getDesc() {
         //Check if the Description is Null
-        if(this.desc == null) {
+        if(this.data[3] == null) {
             return "Null";
         }
 
-        return this.desc;
-    }
-
-    public int getATK(){
-        if(this.atk == null || isInt(this.atk) || Integer.parseInt(this.atk) < 0) {
-            return 0;
-        } else {
-            return Integer.parseInt(this.atk);
-        }
+        return this.data[3];
     }
 
     public int getHP(){
-        if(this.shp == null || isInt(this.shp) || Integer.parseInt(this.shp) < 0) {
+        if(this.data[4] == null || isInt(this.data[4]) || Integer.parseInt(this.data[4]) < 0) {
             return 0;
         } else {
-            return Integer.parseInt(this.shp);
+            return Integer.parseInt(this.data[4]);
+        }
+    }
+
+    public int getATK(){
+        if(this.data[5] == null || isInt(this.data[5]) || Integer.parseInt(this.data[5]) < 0) {
+            return 0;
+        } else {
+            return Integer.parseInt(this.data[5]);
         }
     }
 
     public int getBLD(){
-        if(this.bld == null || isInt(this.bld) || Integer.parseInt(this.bld) < 0) {
+        if(this.data[6] == null || isInt(this.data[6]) || Integer.parseInt(this.data[6]) < 0) {
             return 0;
         } else {
-            return Integer.parseInt(this.bld);
+            return Integer.parseInt(this.data[6]);
         }
     }
 
