@@ -1,4 +1,4 @@
-package cababo2000.CardEngineMain;
+package main.java.CardEngineMain;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;

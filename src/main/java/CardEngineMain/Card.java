@@ -1,4 +1,4 @@
-package cababo2000.CardEngineMain;
+package main.java.CardEngineMain;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -13,8 +13,8 @@ import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Scanner;
 
-import static cababo2000.CEUtils.FontUtils.loadFont;
-import static cababo2000.CEUtils.StringUtils.*;
+import static main.java.CEUtils.FontUtils.loadFont;
+import static main.java.CEUtils.StringUtils.*;
 
 /**
  * The Card class represents an instance of a card. As well, it provides methods that assist in building, saving, and loading card data.

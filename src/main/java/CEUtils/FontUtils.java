@@ -1,4 +1,4 @@
-package cababo2000.CEUtils;
+package main.java.CEUtils;
 
 import java.awt.*;
 import java.io.IOException;

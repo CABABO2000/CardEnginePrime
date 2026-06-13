@@ -1,4 +1,4 @@
-package cababo2000.CardEngineMain;
+package main.java.CardEngineMain;
 
 import javax.imageio.ImageIO;
 import javax.swing.*;
