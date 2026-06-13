@@ -25,6 +25,7 @@ is likely to be lackluster.
  */
 public class GUI extends JFrame {
 
+    // initialize most buttons prior to utilization.
     JButton cardModeButton;
     JButton deckModeButton;
     JButton loadCardButton;
@@ -72,6 +73,9 @@ public class GUI extends JFrame {
 
     public GUI(){ // the constructor
 
+        // This button toggles the Card making UI on while toggling the Deck making UI off.
+        // Note: The two button toggles just hide the UI, so you can switch back and forth
+        // without losing data.
         cardModeButton = new JButton("Card Engine");
         cardModeButton.setFont(new Font("Born2bSportyV2", 0, 25));
         cardModeButton.setForeground(new Color(238, 255, 233));
@@ -96,6 +100,7 @@ public class GUI extends JFrame {
         cardModeButton.setPreferredSize(new Dimension(150, 55));
         cardModeButton.setBorder(new LineBorder(new Color(58, 60, 58)));
 
+        // This button toggles the Deck making UI on and toggles the Card making UI off.
         deckModeButton = new JButton("Deck Engine");
         deckModeButton.setFont(new Font("Born2bSportyV2", 0, 25));
         deckModeButton.setForeground(new Color(238, 255, 233));
@@ -120,6 +125,7 @@ public class GUI extends JFrame {
         deckModeButton.setPreferredSize(new Dimension(150, 55));
         deckModeButton.setBorder(new LineBorder(new Color(49, 51, 49)));
 
+        // The top menu bar that houses the Deck/Card mode toggle buttons.
         topBar = new JPanel();
         topBar.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
         topBar.setPreferredSize(new Dimension(100, 65));
@@ -127,6 +133,8 @@ public class GUI extends JFrame {
         topBar.add(deckModeButton);
         topBar.add(cardModeButton);
 
+        // Card Mode Buttons
+        // This button loads a saved Card from your computer.
         loadCardButton = new JButton("Load Card");
         loadCardButton.setFont(new Font("basis33", 0, 20));
         loadCardButton.setForeground(new Color(238, 255, 233));
@@ -164,6 +172,7 @@ public class GUI extends JFrame {
         loadCardButton.setPreferredSize(new Dimension(260, 35));
         loadCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));
 
+        // This button creates a new Card, overriding the Card that was previously being edited.
         newCardButton = new JButton("New Card");
         newCardButton.setFont(new Font("basis33", 0, 20));
         newCardButton.setForeground(new Color(238, 255, 233));
@@ -197,6 +206,10 @@ public class GUI extends JFrame {
         newCardButton.setPreferredSize(new Dimension(260, 35));
         newCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));
 
+        // This button outputs a .png of the Card onto the computer.
+
+        // The file SHOULD appear in the same directory as the .jar,
+        // but results have been inconsistent across different devices.
         exportCardButton = new JButton("Export Card [Image]");
         exportCardButton.setFont(new Font("basis33", 0, 20));
         exportCardButton.setForeground(new Color(238, 255, 233));
@@ -215,6 +228,9 @@ public class GUI extends JFrame {
         exportCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));
         exportCardButton.setVisible(false);
 
+        // This button outputs a .json file representing the currently active Card
+        // onto the computer.
+        // Much like the last one, results have varied.
         saveCardButton = new JButton("Export Card [Json]");
         saveCardButton.setFont(new Font("basis33", 0, 20));
         saveCardButton.setForeground(new Color(238, 255, 233));
@@ -229,8 +245,9 @@ public class GUI extends JFrame {
         saveCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));
         saveCardButton.setVisible(false);
 
+        // The box that houses the buttons/text fields that edit the currently active Card.
         cardSubSideBar = new JPanel();
-        JPanel dummyGap = new JPanel();
+        JPanel dummyGap = new JPanel(); // The dummy gap is just an invisible box that acts as spacing.
         dummyGap.setPreferredSize(new Dimension(240, 2));
         dummyGap.setBackground(new Color(35, 37, 35));
         cardSubSideBar.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
@@ -239,6 +256,7 @@ public class GUI extends JFrame {
         cardSubSideBar.add(dummyGap);
         cardSubSideBar.setVisible(false);
 
+        // These text fields edit properties of the cards.
         id.setFont(new Font("basis33", Font.ITALIC, 20));
         id.setPreferredSize(new Dimension(240, 35));
         id.setForeground(new Color(238, 255, 233));
@@ -284,6 +302,8 @@ public class GUI extends JFrame {
         cardSubSideBar.add(atk);
         cardSubSideBar.add(bld);
 
+        // This button updates the render and the internal data of the currently active Card
+        // based on the information in the accompanying text fields.
         applyCardButton = new JButton("Apply");
         applyCardButton.setFont(new Font("basis33", 0, 20));
         applyCardButton.setForeground(new Color(238, 255, 233));
@@ -301,6 +321,7 @@ public class GUI extends JFrame {
 
         cardSubSideBar.add(applyCardButton);
 
+        // The location of the Load, New, Both Export buttons, and the sub sidebar.
         cardSideBar = new JPanel();
         cardSideBar.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
         cardSideBar.setPreferredSize(new Dimension(300, 65));
@@ -312,17 +333,23 @@ public class GUI extends JFrame {
         cardSideBar.add(saveCardButton);
         cardSideBar.add(cardSubSideBar);
 
+        // The location of the Card render.
         cardModeCenterBox = new JPanel();
         cardModeCenterBox.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         cardModeCenterBox.setBackground(new Color(58, 60, 58));
         cardModeCenterBox.setVisible(false);
 
 
+        // The Deck Buttons
+
+        // Not a button, the location of the Deck List render.
         deckModeCenterBox = new JPanel();
         deckModeCenterBox.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));
         deckModeCenterBox.setBackground(new Color(58, 60, 58));
         deckModeCenterBox.setVisible(false);
 
+        // This button applies the ID and Name information internally into the Deck, similar
+        // to the Card button equivalent.
         applyDeckButton = new JButton("Apply Name/ID");
         applyDeckButton.setFont(new Font("basis33", 0, 20));
         applyDeckButton.setForeground(new Color(238, 255, 233));
@@ -337,6 +364,7 @@ public class GUI extends JFrame {
         applyDeckButton.setPreferredSize(new Dimension(240, 35));
         applyDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));
 
+        // This button loads a saved Deck from your computer.
         loadDeckButton = new JButton("Load Deck");
         loadDeckButton.setFont(new Font("basis33", 0, 20));
         loadDeckButton.setForeground(new Color(238, 255, 233));
@@ -367,6 +395,7 @@ public class GUI extends JFrame {
         loadDeckButton.setPreferredSize(new Dimension(260, 35));
         loadDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));
 
+        // This button creates a new Deck, overriding the Deck that was previously being edited.
         newDeckButton = new JButton("New Deck");
         newDeckButton.setFont(new Font("basis33", 0, 20));
         newDeckButton.setForeground(new Color(238, 255, 233));
@@ -400,6 +429,7 @@ public class GUI extends JFrame {
         newDeckButton.setPreferredSize(new Dimension(260, 35));
         newDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));
 
+        // This button outputs a .png of the Card onto the computer.
         exportDeckButton = new JButton("Export Deck [Image]");
         exportDeckButton.setFont(new Font("basis33", 0, 20));
         exportDeckButton.setForeground(new Color(238, 255, 233));
@@ -414,6 +444,8 @@ public class GUI extends JFrame {
         exportDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));
         exportDeckButton.setVisible(false);
 
+        // This button outputs a .json file representing the currently active Card
+        // onto the computer.
         saveDeckButton = new JButton("Export Deck [Json]");
         saveDeckButton.setFont(new Font("basis33", 0, 20));
         saveDeckButton.setForeground(new Color(238, 255, 233));
@@ -428,6 +460,7 @@ public class GUI extends JFrame {
         saveDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));
         saveDeckButton.setVisible(false);
 
+        // These text fields determine the currently active Deck's ID and Name.
         did.setFont(new Font("basis33", Font.ITALIC, 20));
         did.setPreferredSize(new Dimension(240, 35));
         did.setForeground(new Color(238, 255, 233));
@@ -438,11 +471,14 @@ public class GUI extends JFrame {
         dname.setForeground(new Color(238, 255, 233));
         dname.setBackground(new Color(49, 51, 49));
 
+        // This text field determines which Card in the list to remove once the
+        // remCardButton is pressed.
         rem.setFont(new Font("basis33", Font.ITALIC, 20));
         rem.setPreferredSize(new Dimension(110, 35));
         rem.setForeground(new Color(238, 255, 233));
         rem.setBackground(new Color(49, 51, 49));
 
+        // This button adds a card into the list.
         addCardButton = new JButton("Add a Card");
         addCardButton.setFont(new Font("basis33", 0, 20));
         addCardButton.setForeground(new Color(238, 255, 233));
@@ -472,6 +508,7 @@ public class GUI extends JFrame {
         addCardButton.setPreferredSize(new Dimension(240, 35));
         addCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));
 
+        // This button removes the Card at the specified index from the list.
         remCardButton = new JButton("Remove Card:");
         remCardButton.setFont(new Font("basis33", 0, 20));
         remCardButton.setForeground(new Color(238, 255, 233));
@@ -488,6 +525,8 @@ public class GUI extends JFrame {
         remCardButton.setPreferredSize(new Dimension(110, 35));
         remCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));
 
+        // The location of the buttons/text fields that edit the properties of the
+        // currently active Deck.
         deckSubSideBar = new JPanel();
         deckSubSideBar.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
         deckSubSideBar.setPreferredSize(new Dimension(260, 600));
@@ -502,6 +541,7 @@ public class GUI extends JFrame {
         deckSubSideBar.add(rem);
         deckSubSideBar.setVisible(false);
 
+        // Location of the sub sidebar, Load, New, and Export buttons.
         deckSideBar = new JPanel();
         deckSideBar.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));
         deckSideBar.setPreferredSize(new Dimension(300, 65));

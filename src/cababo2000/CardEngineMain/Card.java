@@ -149,7 +149,7 @@ public class Card implements Comparable<Card>{
         // https://chatgpt.com/share/6a2ca38f-7974-83e8-8481-db688831d17d
         // Utilized ChatGPT to sus out the cause of a NullPointerException.
         // No code was written with ChatGPT.
-        g2.setFont(b33.deriveFont(40f));
+        g2.setFont(b33.deriveFont(45f));
         g2.setColor(Color.WHITE);
         for (int i = 0; i < (textWrap(getDesc(), 31).size()); i++) {
             g2.drawString(textWrap(getDesc(), 31).get(i), 235, 853 + (i * 45));

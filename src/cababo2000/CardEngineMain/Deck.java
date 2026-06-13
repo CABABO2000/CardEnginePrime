@@ -10,13 +10,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.util.ArrayList;
+import java.util.*;
 import java.util.List;
-import java.util.PriorityQueue;
-import java.util.Scanner;
 
 /**
- * The Deck class represents an instance of a deck. As well, it provides methods that assist in building, saving, and loading deck data.
+ * The Deck class represents an instance of a Deck. As well, it provides methods that assist in building, saving, and loading deck data.
  */
 public class Deck {
     private String identifier;
@@ -181,7 +179,7 @@ public class Deck {
      * @return a Card
      */
     public Card getCard(int slot){
-        return this.cards.get(slot - 1);
+        return this.cards.get(slot);
     }
 
     /**
@@ -202,28 +200,55 @@ public class Deck {
         return this.identifier;
     }
 
+    /**
+     * The getCardList method returns the Deck's Card list.
+     * @return an ArrayList
+     */
     public ArrayList<Card> getCardList(){
         ArrayList<Card> copy = this.cards;
 
         return copy;
     }
 
+    /**
+     * The addCard method adds a given Card to the start of this Deck.
+     * @param c the given Card.
+     */
     public void addCard(Card c) {
         this.cards.addFirst(c);
     }
 
+    /**
+     * The remCard method removes the Card at the given index from this Deck.
+     * If n is outside the bounds of the Deck's size, then this method does nothing.
+     *
+     * n is actually referring to the index prior to n rather than the index itself (So the first card is n=1).
+     * @param n The given slot to remove from.
+     */
     public void remCard(int n){
         if(n <= this.cards.size() & n > 0) this.cards.remove(n - 1);
     }
 
+    /**
+     * The isEmpty method returns true or false based on if the Deck has no Cards in it.
+     * @return a boolean
+     */
     public boolean isEmpty(){
         return !this.cards.isEmpty();
     }
 
-    public void setCards(ArrayList<Card> l){
-        this.cards = l;
+    /**
+     * The setCards method replaces the current Deck's Card list with a given List of Cards.
+     * @param l the given List of Cards.
+     */
+    public void setCards(List<Card> l){
+        this.cards = new ArrayList<>(List.copyOf(l));
     }
 
+    /**
+     * The setName method changes the Deck's <code>name</code> to a given String.
+     * @param str the given String.
+     */
     public void setName(String str){
         if(str == null){
             this.name = "";
@@ -232,6 +257,10 @@ public class Deck {
         }
     }
 
+    /**
+     * The setIdentifier method changes the Deck's <code>identifier</code> to a given String.
+     * @param str the given String.
+     */
     public void setIdentifier(String str){
         if(str == null){
             this.identifier = "";
@@ -240,6 +269,12 @@ public class Deck {
         }
     }
 
+    /**
+     * The sortByName method attempts to sort the Cards in the given Deck by name, then returns that information as a new List.
+     * The method is okay at this; it tries its best (large amounts of entries tend to confuse it).
+     * @param d The given Deck.
+     * @return a List
+     */
     // A very temporary solution; plan to add more sorting types in the future.
     // Also taken from Ch13 lessons.
     public static List<Card> sortByName(Deck d){
