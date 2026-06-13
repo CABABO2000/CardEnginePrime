@@ -78,7 +78,7 @@ public class Deck {
             return gson.fromJson(jsonin, Deck.class);
 
         }catch (FileNotFoundException fnf) {
-            IO.println("file not found");
+            IO.println("A FileNotFoundException has occurred.");
         }
         return null;
     }
@@ -104,7 +104,7 @@ public class Deck {
             return gson.fromJson(jsonin, Deck.class);
 
         }catch (FileNotFoundException fnf) {
-            IO.println("file not found");
+            IO.println("A FileNotFoundException has occurred.");
         }
         return null;
     }
@@ -118,6 +118,8 @@ public class Deck {
      * @return A BufferedImage
      */
     public BufferedImage buildDeckImage(boolean write){
+        IO.println("Printing Deck...");
+        IO.println("= = = = = = =");
 
         BufferedImage bi = new BufferedImage(9900, 6 * 1385, 1);
         Graphics2D g2 = bi.createGraphics();
@@ -126,14 +128,11 @@ public class Deck {
 
         double m = Math.ceil((double)this.cards.size() / 10);
         for(int i = 0; i < Math.ceil((double)this.cards.size() / 60); i++){
-            IO.println("jeepers");
             for(int j = 0; j < m & j < 6; j++){
-                IO.println("meep");
                 for(int k = 0; k < 10 & this.cards.size() - l > 0; k++){
                     if (l > 0 && !(this.cards.get(l).compareTo(this.cards.get(l - 1)) == 0)) {
                         cc = this.cards.get(l).buildCardImage(false);
                     }
-                    IO.println("bogos binted: " + l + " " + m);
                     g2.drawImage(cc, null, k * 990, j * 1385);
                     l++;
                 }
@@ -152,6 +151,9 @@ public class Deck {
             g2 = bi.createGraphics();
         }
 
+        IO.println("Finished Printing Deck!");
+        IO.println("= = = = = = =");
+        IO.println("");
         return bi;
     }
 
@@ -163,13 +165,16 @@ public class Deck {
     public void saveDeckData(){
 
         Gson jsonout = new GsonBuilder().setPrettyPrinting().create();
+        File f = new File(this.identifier + "_deck.json");
         try {
-            PrintStream output = new PrintStream(new File(this.identifier + "_deck.json"));
+            PrintStream output = new PrintStream(f);
             String printout = new String(jsonout.toJson(this));
 
             output.println(printout);
+            IO.println("Trying to save to: " + f.getAbsolutePath());
+            IO.println("");
         } catch (FileNotFoundException fnfe){
-            IO.println("File not found.");
+            IO.println("A FileNotFoundException has occurred.");
         }
 
     }

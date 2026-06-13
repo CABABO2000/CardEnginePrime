@@ -18,5 +18,8 @@ public class Main {
         GraphicsDevice gd = GraphicsEnvironment.getLocalGraphicsEnvironment().getDefaultScreenDevice(); // grabbing the screen size.
 
         new GUI().setSize(gd.getDisplayMode().getWidth(), gd.getDisplayMode().getHeight());
+        IO.println("Welcome to the Card Engine!");
+        IO.println("---------------------------");
+        IO.println("");
     }
 }

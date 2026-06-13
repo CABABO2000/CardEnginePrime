@@ -10,10 +10,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintStream;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Arrays;
-import java.util.Objects;
 import java.util.Scanner;
 
 import static cababo2000.CEUtils.FontUtils.loadFont;
@@ -31,7 +28,7 @@ public class Card implements Comparable<Card>{
     */
 
     public Card() {
-        this.data[0] = "NULL";
+        this.data[0] = "NULL"; // Currently the internal identifier servers no useful distinction. It is only useful if a user wants to make the same card with a different name.
         this.data[1] = "Name";
         this.data[2] = "Type";
         this.data[3] = "Desc";
@@ -62,8 +59,9 @@ public class Card implements Comparable<Card>{
 
             output.println(printout);
             IO.println("Trying to save to: " + f.getAbsolutePath());
+            IO.println("");
         } catch (FileNotFoundException fnfe){
-            IO.println("File not found.");
+            IO.println("A FileNotFoundException has occurred.");
         }
 
     }
@@ -81,14 +79,13 @@ public class Card implements Comparable<Card>{
 
             while(scan.hasNextLine()) {
                 jsonin = jsonin + scan.nextLine();
-                //IO.println(jsonin);
             }
 
             Gson gson = new Gson();
             return gson.fromJson(jsonin, Card.class);
 
         }catch (FileNotFoundException fnf) {
-            IO.println("file not found");
+            IO.println("A FileNotFoundException has occurred.");
         }
         return null;
     }
@@ -105,14 +102,13 @@ public class Card implements Comparable<Card>{
 
             while(scan.hasNextLine()) {
                 jsonin = jsonin + scan.nextLine();
-                //IO.println(jsonin);
             }
 
             Gson gson = new Gson();
             return gson.fromJson(jsonin, Card.class);
 
         }catch (FileNotFoundException fnf) {
-            IO.println("file not found");
+            IO.println("A FileNotFoundException has occurred.");
         }
         return null;
     }

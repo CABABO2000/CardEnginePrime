@@ -1,0 +1,3 @@
+Manifest-Version: 1.0
+Main-Class: cababo2000.CardEngineMain.Main
+
