@@ -6,6 +6,9 @@ import javax.imageio.ImageIO;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * The Main class is only here to initilize the program.
+ */
 public class Main {
     public static void main() {
         //Card.buildCardImage(Card.loadCardData("Test"));
