@@ -1,0 +1,135 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > FontUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">main.java.CEUtils</a>
+</div>
+
+<h1>Coverage Summary for Class: FontUtils (main.java.CEUtils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FontUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    50%
+  </span>
+  <span class="absValue">
+    (1/2)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    33.3%
+  </span>
+  <span class="absValue">
+    (2/6)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package main.java.CEUtils;
+&nbsp;
+&nbsp;import java.awt.*;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/**
+&nbsp; * The FontUtils class contains font loading utilities used in the main package.
+&nbsp; */
+<b class="nc">&nbsp;public class FontUtils {</b>
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The loadFont method loads a given font from the Fonts folder based on its filename.
+&nbsp;     * @param fontname The given font&#39;s filename (Ex; &quot;basis33.ttf&quot;).
+&nbsp;     * @param style The font&#39;s style (Allows any of the font styles that the Font class includes).
+&nbsp;     * @param size The size of the font.
+&nbsp;     * @return
+&nbsp;     */
+&nbsp;    // https://stackoverflow.com/questions/65449685/java-how-to-load-a-custom-font-from-a-resources-folder
+&nbsp;    public static Font loadFont(String fontname, int style, float size){
+&nbsp;        try {
+<b class="fc">&nbsp;            Font f = Font.createFont(Font.TRUETYPE_FONT, FontUtils.class.getResourceAsStream(&quot;/Fonts/&quot; + fontname));</b>
+<b class="fc">&nbsp;            return f.deriveFont(style, size);</b>
+&nbsp;        } catch (FontFormatException e) {
+<b class="nc">&nbsp;            IO.println(&quot;A FontFormatException has Occurred&quot;);</b>
+&nbsp;        } catch (IOException e) {
+<b class="nc">&nbsp;            IO.println(&quot;An IOException has Occurred&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-12 20:33</div>
+</div>
+</body>
+</html>

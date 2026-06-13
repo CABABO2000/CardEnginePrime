@@ -379,8 +379,14 @@ public class GUI extends JFrame {
                 File chosenFile = new File(fileChooser.getSelectedFile().getAbsolutePath());
                 loadedDeck = Deck.loadDeckData(chosenFile);
 
-                Card[] dlarray = loadedDeck.getCardList().toArray(new Card[0]);
-                JList<Card> decklist = new JList<>(dlarray);
+                did.setText(loadedDeck.getIdentifier());
+                dname.setName(loadedDeck.getName());
+                rem.setText("1");
+
+                decklist = new JList<>();
+                model = new DefaultListModel<>();
+                model.addAll(loadedDeck.getCardList());
+                decklist.setModel(model);
                 decklistDisplay = new JScrollPane(decklist);
                 decklistDisplay.setPreferredSize(new Dimension(400, 900));
                 deckModeCenterBox.removeAll();
@@ -408,7 +414,7 @@ public class GUI extends JFrame {
 
             did.setText("ID");
             dname.setName("Name");
-            rem.setText("0");
+            rem.setText("1");
 
             loadedDeck = new Deck("ID", "Name");
             decklist = new JList<>();

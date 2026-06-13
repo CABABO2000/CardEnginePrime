@@ -1,0 +1,678 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > GUI</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">main.java.CardEngineMain</a>
+</div>
+
+<h1>Coverage Summary for Class: GUI (main.java.CardEngineMain)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">GUI</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (15/15)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    99.7%
+  </span>
+  <span class="absValue">
+    (370/371)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package main.java.CardEngineMain;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import javax.swing.*;
+&nbsp;import javax.swing.border.LineBorder;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.File;
+&nbsp;import java.io.IOException;
+&nbsp;
+&nbsp;/*
+&nbsp;This file is an unholy obelisk of cobbled together code shoved into a constructor. The documentation of this file
+&nbsp;is likely to be lackluster.
+&nbsp; */
+&nbsp;
+&nbsp;// https://www.youtube.com/watch?v=MtZqX9Wc8M0 by Career &amp; Tech HQ
+&nbsp;// https://www.youtube.com/watch?v=Kmgo00avvEw by Bro Code
+&nbsp;// https://www.youtube.com/watch?v=A6sA9KItwpY by Bro Code
+&nbsp;// https://www.youtube.com/watch?v=LEJ1kGHSXdA by Bro Code
+&nbsp;// https://www.youtube.com/watch?v=mDfBc9ViRrM by Turtle Code
+&nbsp;// https://stackoverflow.com/questions/66822118/how-to-use-flatlaf-library-in-swing-application (Response from gthanop)
+&nbsp;// https://stackoverflow.com/questions/16497853/scale-a-bufferedimage-the-fastest-and-easiest-way
+&nbsp;/**
+&nbsp; * The GUI class handles all of the graphical interface logic outside of card/deck images.
+&nbsp; */
+&nbsp;public class GUI extends JFrame {
+&nbsp;
+&nbsp;    // initialize most buttons prior to utilization.
+&nbsp;    JButton cardModeButton;
+&nbsp;    JButton deckModeButton;
+&nbsp;    JButton loadCardButton;
+&nbsp;    JButton newCardButton;
+&nbsp;    JButton exportCardButton;
+&nbsp;    JButton saveCardButton;
+<b class="fc">&nbsp;    boolean mode = false; // false = deckmode, true = cardmode</b>
+&nbsp;
+&nbsp;    JPanel topBar;
+&nbsp;    JPanel cardSideBar;
+&nbsp;    JPanel cardModeCenterBox;
+&nbsp;
+&nbsp;    JPanel cardSubSideBar;
+<b class="fc">&nbsp;    JTextField id = new JTextField(&quot;ID&quot;);</b>
+<b class="fc">&nbsp;    JTextField name = new JTextField(&quot;Name&quot;);</b>
+<b class="fc">&nbsp;    JTextField type = new JTextField(&quot;Type&quot;);</b>
+<b class="fc">&nbsp;    JTextArea desc = new JTextArea(&quot;Description&quot;);</b>
+<b class="fc">&nbsp;    JTextField hp = new JTextField(&quot;1&quot;);</b>
+<b class="fc">&nbsp;    JTextField atk = new JTextField(&quot;2&quot;);</b>
+<b class="fc">&nbsp;    JTextField bld = new JTextField(&quot;3&quot;);</b>
+&nbsp;    JButton applyCardButton;
+&nbsp;
+<b class="fc">&nbsp;    Card loadedCard = null;</b>
+<b class="fc">&nbsp;    JLabel cardImage = null;</b>
+&nbsp;
+&nbsp;    JPanel deckSideBar;
+&nbsp;    JPanel deckSubSideBar;
+&nbsp;    JPanel deckModeCenterBox;
+&nbsp;    JScrollPane decklistDisplay;
+&nbsp;    JButton exportDeckButton;
+&nbsp;    JButton saveDeckButton;
+&nbsp;    JList&lt;Card&gt; decklist;
+&nbsp;    DefaultListModel&lt;Card&gt; model;
+<b class="fc">&nbsp;    JTextField did = new JTextField(&quot;ID&quot;);</b>
+<b class="fc">&nbsp;    JTextField dname = new JTextField(&quot;Name&quot;);</b>
+&nbsp;    JButton applyDeckButton;
+<b class="fc">&nbsp;    JTextField rem = new JTextField(&quot;1&quot;);</b>
+&nbsp;    JButton addCardButton;
+&nbsp;    JButton remCardButton;
+&nbsp;
+&nbsp;    JButton loadDeckButton;
+&nbsp;    JButton newDeckButton;
+&nbsp;
+<b class="fc">&nbsp;    Deck loadedDeck = null;</b>
+&nbsp;
+<b class="fc">&nbsp;    public GUI(){ // the constructor</b>
+&nbsp;
+&nbsp;        // This button toggles the Card making UI on while toggling the Deck making UI off.
+&nbsp;        // Note: The two button toggles just hide the UI, so you can switch back and forth
+&nbsp;        // without losing data.
+<b class="fc">&nbsp;        cardModeButton = new JButton(&quot;Card Engine&quot;);</b>
+<b class="fc">&nbsp;        cardModeButton.setFont(new Font(&quot;Born2bSportyV2&quot;, 0, 25));</b>
+<b class="fc">&nbsp;        cardModeButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        cardModeButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        cardModeButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            mode = true;</b>
+<b class="fc">&nbsp;            cardModeButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;            deckModeButton.setForeground(new Color(121, 147, 114));</b>
+<b class="fc">&nbsp;            deckSideBar.setVisible(false);</b>
+<b class="fc">&nbsp;            deckModeCenterBox.setVisible(false);</b>
+<b class="fc">&nbsp;            this.remove(deckSideBar);</b>
+<b class="fc">&nbsp;            this.remove(deckModeCenterBox);</b>
+<b class="fc">&nbsp;            this.add(cardModeCenterBox, BorderLayout.CENTER);</b>
+<b class="fc">&nbsp;            this.add(cardSideBar, BorderLayout.EAST);</b>
+<b class="fc">&nbsp;            cardSideBar.setVisible(true);</b>
+<b class="fc">&nbsp;            cardModeCenterBox.setVisible(true);</b>
+<b class="fc">&nbsp;            IO.println(&quot;CardMode!&quot;);</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        cardModeButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        cardModeButton.setPreferredSize(new Dimension(150, 55));</b>
+<b class="fc">&nbsp;        cardModeButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+&nbsp;        // This button toggles the Deck making UI on and toggles the Card making UI off.
+<b class="fc">&nbsp;        deckModeButton = new JButton(&quot;Deck Engine&quot;);</b>
+<b class="fc">&nbsp;        deckModeButton.setFont(new Font(&quot;Born2bSportyV2&quot;, 0, 25));</b>
+<b class="fc">&nbsp;        deckModeButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        deckModeButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        deckModeButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            mode = false;</b>
+<b class="fc">&nbsp;            deckModeButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;            cardModeButton.setForeground(new Color(121, 147, 114));</b>
+<b class="fc">&nbsp;            cardSideBar.setVisible(false);</b>
+<b class="fc">&nbsp;            cardModeCenterBox.setVisible(false);</b>
+<b class="fc">&nbsp;            this.remove(cardSideBar);</b>
+<b class="fc">&nbsp;            this.remove(cardModeCenterBox);</b>
+<b class="fc">&nbsp;            this.add(deckModeCenterBox, BorderLayout.CENTER);</b>
+<b class="fc">&nbsp;            this.add(deckSideBar, BorderLayout.EAST);</b>
+<b class="fc">&nbsp;            deckSideBar.setVisible(true);</b>
+<b class="fc">&nbsp;            deckModeCenterBox.setVisible(true);</b>
+<b class="fc">&nbsp;            IO.println(&quot;DeckMode!&quot;);</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        deckModeButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        deckModeButton.setPreferredSize(new Dimension(150, 55));</b>
+<b class="fc">&nbsp;        deckModeButton.setBorder(new LineBorder(new Color(49, 51, 49)));</b>
+&nbsp;
+&nbsp;        // The top menu bar that houses the Deck/Card mode toggle buttons.
+<b class="fc">&nbsp;        topBar = new JPanel();</b>
+<b class="fc">&nbsp;        topBar.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));</b>
+<b class="fc">&nbsp;        topBar.setPreferredSize(new Dimension(100, 65));</b>
+<b class="fc">&nbsp;        topBar.setBackground(new Color(49, 51, 49));</b>
+<b class="fc">&nbsp;        topBar.add(deckModeButton);</b>
+<b class="fc">&nbsp;        topBar.add(cardModeButton);</b>
+&nbsp;
+&nbsp;        // Card Mode Buttons
+&nbsp;        // This button loads a saved Card from your computer.
+<b class="fc">&nbsp;        loadCardButton = new JButton(&quot;Load Card&quot;);</b>
+<b class="fc">&nbsp;        loadCardButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        loadCardButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        loadCardButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        loadCardButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            JFileChooser fileChooser = new JFileChooser();</b>
+<b class="fc">&nbsp;            fileChooser.setCurrentDirectory(new File(&quot;.&quot;));</b>
+<b class="fc">&nbsp;            int response = fileChooser.showOpenDialog(null);</b>
+&nbsp;
+<b class="fc">&nbsp;            if(response == JFileChooser.APPROVE_OPTION) {</b>
+<b class="fc">&nbsp;                File chosenFile = new File(fileChooser.getSelectedFile().getAbsolutePath());</b>
+<b class="fc">&nbsp;                loadedCard = Card.loadCardData(chosenFile);</b>
+&nbsp;
+<b class="fc">&nbsp;                if(cardImage != null) cardImage.setIcon(null);</b>
+<b class="fc">&nbsp;                cardImage = new JLabel(new ImageIcon(loadedCard.buildCardImage(false).getScaledInstance((int)(990 / 1.6), (int)(1385 / 1.6), BufferedImage.SCALE_FAST)));</b>
+<b class="fc">&nbsp;                cardImage.setPreferredSize(new Dimension((int)(990 / 1.6), (int)(1385 / 1.6)));</b>
+<b class="fc">&nbsp;                cardModeCenterBox.removeAll();</b>
+<b class="fc">&nbsp;                cardModeCenterBox.add(cardImage);</b>
+<b class="fc">&nbsp;                saveCardButton.setVisible(true);</b>
+<b class="fc">&nbsp;                exportCardButton.setVisible(true);</b>
+<b class="fc">&nbsp;                cardSubSideBar.setVisible(true);</b>
+&nbsp;
+<b class="fc">&nbsp;                id.setText(loadedCard.getID());</b>
+<b class="fc">&nbsp;                name.setText(loadedCard.getName());</b>
+<b class="fc">&nbsp;                type.setText(loadedCard.getType());</b>
+<b class="fc">&nbsp;                desc.setText(loadedCard.getDesc());</b>
+<b class="fc">&nbsp;                hp.setText(loadedCard.getHP() + &quot;&quot;);</b>
+<b class="fc">&nbsp;                atk.setText(loadedCard.getATK() + &quot;&quot;);</b>
+<b class="fc">&nbsp;                bld.setText(loadedCard.getBLD() + &quot;&quot;);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        loadCardButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        loadCardButton.setPreferredSize(new Dimension(260, 35));</b>
+<b class="fc">&nbsp;        loadCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+&nbsp;        // This button creates a new Card, overriding the Card that was previously being edited.
+<b class="fc">&nbsp;        newCardButton = new JButton(&quot;New Card&quot;);</b>
+<b class="fc">&nbsp;        newCardButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        newCardButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        newCardButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        newCardButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            id.setText(&quot;ID&quot;);</b>
+<b class="fc">&nbsp;            name.setText(&quot;Name&quot;);</b>
+<b class="fc">&nbsp;            type.setText(&quot;Type&quot;);</b>
+<b class="fc">&nbsp;            desc.setText(&quot;Description&quot;);</b>
+<b class="fc">&nbsp;            hp.setText(&quot;1&quot;);</b>
+<b class="fc">&nbsp;            atk.setText(&quot;2&quot;);</b>
+<b class="fc">&nbsp;            bld.setText(&quot;3&quot;);</b>
+<b class="fc">&nbsp;            loadedCard = null;</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedCard = new Card();</b>
+<b class="fc">&nbsp;            loadedCard.setData(id.getText(), name.getText(), type.getText(), desc.getText() ,Integer.parseInt(hp.getText()), Integer.parseInt(atk.getText()), Integer.parseInt(bld.getText()));</b>
+<b class="fc">&nbsp;            if(cardImage != null) cardImage.setIcon(null);</b>
+<b class="fc">&nbsp;            cardImage = new JLabel(new ImageIcon(loadedCard.buildCardImage(false).getScaledInstance((int)(990 / 1.6), (int)(1385 / 1.6), BufferedImage.SCALE_FAST)));</b>
+<b class="fc">&nbsp;            cardImage.setPreferredSize(new Dimension((int)(990 / 1.6), (int)(1385 / 1.6)));</b>
+<b class="fc">&nbsp;            cardModeCenterBox.removeAll();</b>
+<b class="fc">&nbsp;            cardModeCenterBox.add(cardImage);</b>
+<b class="fc">&nbsp;            saveCardButton.setVisible(true);</b>
+<b class="fc">&nbsp;            exportCardButton.setVisible(true);</b>
+<b class="fc">&nbsp;            cardSubSideBar.setVisible(true);</b>
+&nbsp;
+<b class="fc">&nbsp;            cardImage.repaint();</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        newCardButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        newCardButton.setPreferredSize(new Dimension(260, 35));</b>
+<b class="fc">&nbsp;        newCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+&nbsp;        // This button outputs a .png of the Card onto the computer.
+&nbsp;
+&nbsp;        // The file SHOULD appear in the same directory as the .jar,
+&nbsp;        // but results have been inconsistent across different devices.
+<b class="fc">&nbsp;        exportCardButton = new JButton(&quot;Export Card [Image]&quot;);</b>
+<b class="fc">&nbsp;        exportCardButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        exportCardButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        exportCardButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        exportCardButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+&nbsp;            try {
+<b class="fc">&nbsp;                ImageIO.write(loadedCard.buildCardImage(false), &quot;png&quot;, new File(loadedCard.getName() + &quot;.png&quot;));</b>
+&nbsp;            } catch (IOException ex) {
+<b class="nc">&nbsp;                throw new RuntimeException(ex);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        exportCardButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        exportCardButton.setPreferredSize(new Dimension(260, 35));</b>
+<b class="fc">&nbsp;        exportCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+<b class="fc">&nbsp;        exportCardButton.setVisible(false);</b>
+&nbsp;
+&nbsp;        // This button outputs a .json file representing the currently active Card
+&nbsp;        // onto the computer.
+&nbsp;        // Much like the last one, results have varied.
+<b class="fc">&nbsp;        saveCardButton = new JButton(&quot;Export Card [Json]&quot;);</b>
+<b class="fc">&nbsp;        saveCardButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        saveCardButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        saveCardButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        saveCardButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedCard.saveCardData();</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        saveCardButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        saveCardButton.setPreferredSize(new Dimension(260, 35));</b>
+<b class="fc">&nbsp;        saveCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+<b class="fc">&nbsp;        saveCardButton.setVisible(false);</b>
+&nbsp;
+&nbsp;        // The box that houses the buttons/text fields that edit the currently active Card.
+<b class="fc">&nbsp;        cardSubSideBar = new JPanel();</b>
+<b class="fc">&nbsp;        JPanel dummyGap = new JPanel(); // The dummy gap is just an invisible box that acts as spacing.</b>
+<b class="fc">&nbsp;        dummyGap.setPreferredSize(new Dimension(240, 2));</b>
+<b class="fc">&nbsp;        dummyGap.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        cardSubSideBar.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));</b>
+<b class="fc">&nbsp;        cardSubSideBar.setPreferredSize(new Dimension(260, 600));</b>
+<b class="fc">&nbsp;        cardSubSideBar.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        cardSubSideBar.add(dummyGap);</b>
+<b class="fc">&nbsp;        cardSubSideBar.setVisible(false);</b>
+&nbsp;
+&nbsp;        // These text fields edit properties of the cards.
+<b class="fc">&nbsp;        id.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        id.setPreferredSize(new Dimension(240, 35));</b>
+<b class="fc">&nbsp;        id.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        id.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+<b class="fc">&nbsp;        name.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        name.setPreferredSize(new Dimension(240, 35));</b>
+<b class="fc">&nbsp;        name.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        name.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+<b class="fc">&nbsp;        type.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        type.setPreferredSize(new Dimension(240, 35));</b>
+<b class="fc">&nbsp;        type.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        type.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+<b class="fc">&nbsp;        desc.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        desc.setPreferredSize(new Dimension(240, 360));</b>
+<b class="fc">&nbsp;        desc.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        desc.setBackground(new Color(49, 51, 49));</b>
+<b class="fc">&nbsp;        desc.setLineWrap(true);</b>
+<b class="fc">&nbsp;        desc.setRows(12);</b>
+&nbsp;
+<b class="fc">&nbsp;        hp.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        hp.setPreferredSize(new Dimension(76, 35));</b>
+<b class="fc">&nbsp;        hp.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        hp.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+<b class="fc">&nbsp;        atk.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        atk.setPreferredSize(new Dimension(76, 35));</b>
+<b class="fc">&nbsp;        atk.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        atk.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+<b class="fc">&nbsp;        bld.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        bld.setPreferredSize(new Dimension(76, 35));</b>
+<b class="fc">&nbsp;        bld.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        bld.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+<b class="fc">&nbsp;        cardSubSideBar.add(id);</b>
+<b class="fc">&nbsp;        cardSubSideBar.add(name);</b>
+<b class="fc">&nbsp;        cardSubSideBar.add(type);</b>
+<b class="fc">&nbsp;        cardSubSideBar.add(desc);</b>
+<b class="fc">&nbsp;        cardSubSideBar.add(hp);</b>
+<b class="fc">&nbsp;        cardSubSideBar.add(atk);</b>
+<b class="fc">&nbsp;        cardSubSideBar.add(bld);</b>
+&nbsp;
+&nbsp;        // This button updates the render and the internal data of the currently active Card
+&nbsp;        // based on the information in the accompanying text fields.
+<b class="fc">&nbsp;        applyCardButton = new JButton(&quot;Apply&quot;);</b>
+<b class="fc">&nbsp;        applyCardButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        applyCardButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        applyCardButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        applyCardButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedCard.setData(id.getText(), name.getText(), type.getText(), desc.getText() ,Integer.parseInt(hp.getText()), Integer.parseInt(atk.getText()), Integer.parseInt(bld.getText()));</b>
+<b class="fc">&nbsp;            cardImage.setIcon(new ImageIcon(loadedCard.buildCardImage(false).getScaledInstance((int)(990 / 1.6), (int)(1385 / 1.6), BufferedImage.SCALE_FAST)));</b>
+<b class="fc">&nbsp;            cardImage.repaint();</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        applyCardButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        applyCardButton.setPreferredSize(new Dimension(240, 35));</b>
+<b class="fc">&nbsp;        applyCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+<b class="fc">&nbsp;        cardSubSideBar.add(applyCardButton);</b>
+&nbsp;
+&nbsp;        // The location of the Load, New, Both Export buttons, and the sub sidebar.
+<b class="fc">&nbsp;        cardSideBar = new JPanel();</b>
+<b class="fc">&nbsp;        cardSideBar.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));</b>
+<b class="fc">&nbsp;        cardSideBar.setPreferredSize(new Dimension(300, 65));</b>
+<b class="fc">&nbsp;        cardSideBar.setBackground(new Color(49, 51, 49));</b>
+<b class="fc">&nbsp;        cardSideBar.setVisible(false);</b>
+<b class="fc">&nbsp;        cardSideBar.add(loadCardButton);</b>
+<b class="fc">&nbsp;        cardSideBar.add(newCardButton);</b>
+<b class="fc">&nbsp;        cardSideBar.add(exportCardButton);</b>
+<b class="fc">&nbsp;        cardSideBar.add(saveCardButton);</b>
+<b class="fc">&nbsp;        cardSideBar.add(cardSubSideBar);</b>
+&nbsp;
+&nbsp;        // The location of the Card render.
+<b class="fc">&nbsp;        cardModeCenterBox = new JPanel();</b>
+<b class="fc">&nbsp;        cardModeCenterBox.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));</b>
+<b class="fc">&nbsp;        cardModeCenterBox.setBackground(new Color(58, 60, 58));</b>
+<b class="fc">&nbsp;        cardModeCenterBox.setVisible(false);</b>
+&nbsp;
+&nbsp;
+&nbsp;        // The Deck Buttons
+&nbsp;
+&nbsp;        // Not a button, the location of the Deck List render.
+<b class="fc">&nbsp;        deckModeCenterBox = new JPanel();</b>
+<b class="fc">&nbsp;        deckModeCenterBox.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 20));</b>
+<b class="fc">&nbsp;        deckModeCenterBox.setBackground(new Color(58, 60, 58));</b>
+<b class="fc">&nbsp;        deckModeCenterBox.setVisible(false);</b>
+&nbsp;
+&nbsp;        // This button applies the ID and Name information internally into the Deck, similar
+&nbsp;        // to the Card button equivalent.
+<b class="fc">&nbsp;        applyDeckButton = new JButton(&quot;Apply Name/ID&quot;);</b>
+<b class="fc">&nbsp;        applyDeckButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        applyDeckButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        applyDeckButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        applyDeckButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedDeck.setName(dname.getText());</b>
+<b class="fc">&nbsp;            loadedDeck.setIdentifier(did.getText());</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        applyDeckButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        applyDeckButton.setPreferredSize(new Dimension(240, 35));</b>
+<b class="fc">&nbsp;        applyDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+&nbsp;        // This button loads a saved Deck from your computer.
+<b class="fc">&nbsp;        loadDeckButton = new JButton(&quot;Load Deck&quot;);</b>
+<b class="fc">&nbsp;        loadDeckButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        loadDeckButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        loadDeckButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        loadDeckButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            JFileChooser fileChooser = new JFileChooser();</b>
+<b class="fc">&nbsp;            fileChooser.setCurrentDirectory(new File(&quot;.&quot;));</b>
+<b class="fc">&nbsp;            int response = fileChooser.showOpenDialog(null);</b>
+&nbsp;
+<b class="fc">&nbsp;            if(response == JFileChooser.APPROVE_OPTION) {</b>
+<b class="fc">&nbsp;                File chosenFile = new File(fileChooser.getSelectedFile().getAbsolutePath());</b>
+<b class="fc">&nbsp;                loadedDeck = Deck.loadDeckData(chosenFile);</b>
+&nbsp;
+<b class="fc">&nbsp;                did.setText(loadedDeck.getIdentifier());</b>
+<b class="fc">&nbsp;                dname.setName(loadedDeck.getName());</b>
+<b class="fc">&nbsp;                rem.setText(&quot;1&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;                decklist = new JList&lt;&gt;();</b>
+<b class="fc">&nbsp;                model = new DefaultListModel&lt;&gt;();</b>
+<b class="fc">&nbsp;                model.addAll(loadedDeck.getCardList());</b>
+<b class="fc">&nbsp;                decklist.setModel(model);</b>
+<b class="fc">&nbsp;                decklistDisplay = new JScrollPane(decklist);</b>
+<b class="fc">&nbsp;                decklistDisplay.setPreferredSize(new Dimension(400, 900));</b>
+<b class="fc">&nbsp;                deckModeCenterBox.removeAll();</b>
+<b class="fc">&nbsp;                deckModeCenterBox.add(decklistDisplay);</b>
+<b class="fc">&nbsp;                saveDeckButton.setVisible(true);</b>
+<b class="fc">&nbsp;                exportDeckButton.setVisible(true);</b>
+<b class="fc">&nbsp;                deckSubSideBar.setVisible(true);</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        loadDeckButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        loadDeckButton.setPreferredSize(new Dimension(260, 35));</b>
+<b class="fc">&nbsp;        loadDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+&nbsp;        // This button creates a new Deck, overriding the Deck that was previously being edited.
+<b class="fc">&nbsp;        newDeckButton = new JButton(&quot;New Deck&quot;);</b>
+<b class="fc">&nbsp;        newDeckButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        newDeckButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        newDeckButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        newDeckButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedDeck = null;</b>
+<b class="fc">&nbsp;            decklist = null;</b>
+<b class="fc">&nbsp;            model = null;</b>
+&nbsp;
+<b class="fc">&nbsp;            did.setText(&quot;ID&quot;);</b>
+<b class="fc">&nbsp;            dname.setName(&quot;Name&quot;);</b>
+<b class="fc">&nbsp;            rem.setText(&quot;1&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedDeck = new Deck(&quot;ID&quot;, &quot;Name&quot;);</b>
+<b class="fc">&nbsp;            decklist = new JList&lt;&gt;();</b>
+<b class="fc">&nbsp;            model = new DefaultListModel&lt;&gt;();</b>
+<b class="fc">&nbsp;            model.addAll(loadedDeck.getCardList());</b>
+<b class="fc">&nbsp;            decklist.setModel(model);</b>
+<b class="fc">&nbsp;            decklistDisplay = new JScrollPane(decklist);</b>
+<b class="fc">&nbsp;            decklistDisplay.setPreferredSize(new Dimension(500, 900));</b>
+&nbsp;
+<b class="fc">&nbsp;            deckModeCenterBox.removeAll();</b>
+<b class="fc">&nbsp;            deckModeCenterBox.add(decklistDisplay);</b>
+<b class="fc">&nbsp;            saveDeckButton.setVisible(true);</b>
+<b class="fc">&nbsp;            exportDeckButton.setVisible(true);</b>
+<b class="fc">&nbsp;            deckSubSideBar.setVisible(true);</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        newDeckButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        newDeckButton.setPreferredSize(new Dimension(260, 35));</b>
+<b class="fc">&nbsp;        newDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+&nbsp;        // This button outputs a .png of the Card onto the computer.
+<b class="fc">&nbsp;        exportDeckButton = new JButton(&quot;Export Deck [Image]&quot;);</b>
+<b class="fc">&nbsp;        exportDeckButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        exportDeckButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        exportDeckButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        exportDeckButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedDeck.buildDeckImage(true);</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        exportDeckButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        exportDeckButton.setPreferredSize(new Dimension(260, 35));</b>
+<b class="fc">&nbsp;        exportDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+<b class="fc">&nbsp;        exportDeckButton.setVisible(false);</b>
+&nbsp;
+&nbsp;        // This button outputs a .json file representing the currently active Card
+&nbsp;        // onto the computer.
+<b class="fc">&nbsp;        saveDeckButton = new JButton(&quot;Export Deck [Json]&quot;);</b>
+<b class="fc">&nbsp;        saveDeckButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        saveDeckButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        saveDeckButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        saveDeckButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedDeck.saveDeckData();</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        saveDeckButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        saveDeckButton.setPreferredSize(new Dimension(260, 35));</b>
+<b class="fc">&nbsp;        saveDeckButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+<b class="fc">&nbsp;        saveDeckButton.setVisible(false);</b>
+&nbsp;
+&nbsp;        // These text fields determine the currently active Deck&#39;s ID and Name.
+<b class="fc">&nbsp;        did.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        did.setPreferredSize(new Dimension(240, 35));</b>
+<b class="fc">&nbsp;        did.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        did.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+<b class="fc">&nbsp;        dname.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        dname.setPreferredSize(new Dimension(240, 35));</b>
+<b class="fc">&nbsp;        dname.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        dname.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+&nbsp;        // This text field determines which Card in the list to remove once the
+&nbsp;        // remCardButton is pressed.
+<b class="fc">&nbsp;        rem.setFont(new Font(&quot;basis33&quot;, Font.ITALIC, 20));</b>
+<b class="fc">&nbsp;        rem.setPreferredSize(new Dimension(110, 35));</b>
+<b class="fc">&nbsp;        rem.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        rem.setBackground(new Color(49, 51, 49));</b>
+&nbsp;
+&nbsp;        // This button adds a card into the list.
+<b class="fc">&nbsp;        addCardButton = new JButton(&quot;Add a Card&quot;);</b>
+<b class="fc">&nbsp;        addCardButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        addCardButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        addCardButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        addCardButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            JFileChooser fileChooser = new JFileChooser();</b>
+<b class="fc">&nbsp;            fileChooser.setCurrentDirectory(new File(&quot;.&quot;));</b>
+<b class="fc">&nbsp;            fileChooser.setMultiSelectionEnabled(true);</b>
+<b class="fc">&nbsp;            int response = fileChooser.showOpenDialog(null);</b>
+&nbsp;            Card addedcard;
+&nbsp;
+<b class="fc">&nbsp;            if(response == JFileChooser.APPROVE_OPTION) {</b>
+<b class="fc">&nbsp;                for(File f : fileChooser.getSelectedFiles()) {</b>
+<b class="fc">&nbsp;                    if(!Card.loadCardData(new File(f.getAbsolutePath())).getID().equals(&quot;NULL&quot;)) {</b>
+<b class="fc">&nbsp;                        addedcard = Card.loadCardData(f);</b>
+&nbsp;
+<b class="fc">&nbsp;                        loadedDeck.addCard(addedcard);</b>
+&nbsp;                    }
+&nbsp;                }
+<b class="fc">&nbsp;                model.clear();</b>
+<b class="fc">&nbsp;                model.addAll(Deck.sortByName(loadedDeck));</b>
+&nbsp;            }
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        addCardButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        addCardButton.setPreferredSize(new Dimension(240, 35));</b>
+<b class="fc">&nbsp;        addCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+&nbsp;        // This button removes the Card at the specified index from the list.
+<b class="fc">&nbsp;        remCardButton = new JButton(&quot;Remove Card:&quot;);</b>
+<b class="fc">&nbsp;        remCardButton.setFont(new Font(&quot;basis33&quot;, 0, 20));</b>
+<b class="fc">&nbsp;        remCardButton.setForeground(new Color(238, 255, 233));</b>
+<b class="fc">&nbsp;        remCardButton.setFocusable(false);</b>
+<b class="fc">&nbsp;        remCardButton.addActionListener((e) -&gt; {</b>
+&nbsp;
+<b class="fc">&nbsp;            loadedDeck.remCard(Integer.parseInt(rem.getText()));</b>
+&nbsp;
+<b class="fc">&nbsp;            model.clear();</b>
+<b class="fc">&nbsp;            model.addAll(Deck.sortByName(loadedDeck));</b>
+&nbsp;
+&nbsp;        });
+<b class="fc">&nbsp;        remCardButton.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        remCardButton.setPreferredSize(new Dimension(110, 35));</b>
+<b class="fc">&nbsp;        remCardButton.setBorder(new LineBorder(new Color(58, 60, 58)));</b>
+&nbsp;
+&nbsp;        // The location of the buttons/text fields that edit the properties of the
+&nbsp;        // currently active Deck.
+<b class="fc">&nbsp;        deckSubSideBar = new JPanel();</b>
+<b class="fc">&nbsp;        deckSubSideBar.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));</b>
+<b class="fc">&nbsp;        deckSubSideBar.setPreferredSize(new Dimension(260, 600));</b>
+<b class="fc">&nbsp;        deckSubSideBar.setBackground(new Color(35, 37, 35));</b>
+<b class="fc">&nbsp;        deckSubSideBar.add(dummyGap);</b>
+<b class="fc">&nbsp;        deckSubSideBar.add(did);</b>
+<b class="fc">&nbsp;        deckSubSideBar.add(dname);</b>
+<b class="fc">&nbsp;        deckSubSideBar.add(applyDeckButton);</b>
+<b class="fc">&nbsp;        deckSubSideBar.add(dummyGap);</b>
+<b class="fc">&nbsp;        deckSubSideBar.add(addCardButton);</b>
+<b class="fc">&nbsp;        deckSubSideBar.add(remCardButton);</b>
+<b class="fc">&nbsp;        deckSubSideBar.add(rem);</b>
+<b class="fc">&nbsp;        deckSubSideBar.setVisible(false);</b>
+&nbsp;
+&nbsp;        // Location of the sub sidebar, Load, New, and Export buttons.
+<b class="fc">&nbsp;        deckSideBar = new JPanel();</b>
+<b class="fc">&nbsp;        deckSideBar.setLayout(new FlowLayout(FlowLayout.CENTER, 0, 5));</b>
+<b class="fc">&nbsp;        deckSideBar.setPreferredSize(new Dimension(300, 65));</b>
+<b class="fc">&nbsp;        deckSideBar.setBackground(new Color(49, 51, 49));</b>
+<b class="fc">&nbsp;        deckSideBar.setVisible(false);</b>
+<b class="fc">&nbsp;        deckSideBar.add(loadDeckButton);</b>
+<b class="fc">&nbsp;        deckSideBar.add(newDeckButton);</b>
+<b class="fc">&nbsp;        deckSideBar.add(exportDeckButton);</b>
+<b class="fc">&nbsp;        deckSideBar.add(saveDeckButton);</b>
+<b class="fc">&nbsp;        deckSideBar.add(deckSubSideBar);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.setResizable(true);</b>
+<b class="fc">&nbsp;        this.setLayout(new BorderLayout(1, 1));</b>
+<b class="fc">&nbsp;        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);</b>
+<b class="fc">&nbsp;        this.getContentPane().setBackground(new Color(58, 60, 58));</b>
+<b class="fc">&nbsp;        this.setTitle(&quot;Card Engine Prime&quot;);</b>
+<b class="fc">&nbsp;        this.setSize(800, 800);</b>
+<b class="fc">&nbsp;        this.add(topBar, BorderLayout.NORTH);</b>
+&nbsp;
+<b class="fc">&nbsp;        this.setVisible(true);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+&nbsp;
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-12 20:33</div>
+</div>
+</body>
+</html>

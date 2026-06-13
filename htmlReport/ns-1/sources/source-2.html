@@ -1,0 +1,182 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > StringUtils</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">main.java.CEUtils</a>
+</div>
+
+<h1>Coverage Summary for Class: StringUtils (main.java.CEUtils)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">StringUtils</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    80%
+  </span>
+  <span class="absValue">
+    (4/5)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    91.7%
+  </span>
+  <span class="absValue">
+    (22/24)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package main.java.CEUtils;
+&nbsp;
+&nbsp;import java.util.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * The StringUtils class contains all String/Text processing related utilities used in the main package.
+&nbsp; */
+<b class="nc">&nbsp;public class StringUtils {</b>
+&nbsp;
+&nbsp;    // https://stackoverflow.com/questions/5439529/determine-if-a-string-is-an-integer-in-java (answer from corsiKa (https://stackoverflow.com/users/330057/corsika))
+&nbsp;    /**
+&nbsp;     * The isInt method checks if a given String is an int.
+&nbsp;     * @param str The given String to check.
+&nbsp;     * @return A boolean
+&nbsp;     */
+&nbsp;    public static boolean isInt(String str){
+&nbsp;
+&nbsp;        try{
+<b class="fc">&nbsp;            Integer.parseInt(str);</b>
+&nbsp;        }catch (NumberFormatException nfe){
+<b class="nc">&nbsp;            return true;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return false;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The textWrap method splits a String into a String List evenly.
+&nbsp;     * @param text The String that will be wrapped.
+&nbsp;     * @param linelength The length of each line (by characters).
+&nbsp;     * @return A String List
+&nbsp;     */
+&nbsp;    public static List&lt;String&gt; textWrap(String text, int linelength){
+<b class="fc">&nbsp;        List&lt;String&gt; out = new LinkedList&lt;&gt;();</b>
+&nbsp;
+<b class="fc">&nbsp;        int first = 0;</b>
+<b class="fc">&nbsp;        int last = 0;</b>
+<b class="fc">&nbsp;        int length = text.length();</b>
+<b class="fc">&nbsp;        String current = &quot;&quot;;</b>
+<b class="fc">&nbsp;        boolean firstline = true;</b>
+&nbsp;
+<b class="fc">&nbsp;        while(last &lt;= length) {</b>
+<b class="fc">&nbsp;            if (current.length() &gt; linelength) {</b>
+<b class="fc">&nbsp;                out.add(current);</b>
+<b class="fc">&nbsp;                current = &quot;&quot;;</b>
+<b class="fc">&nbsp;                first = last - 1;</b>
+<b class="fc">&nbsp;                last++;</b>
+<b class="fc">&nbsp;                firstline = false;</b>
+&nbsp;            } else {
+<b class="fc">&nbsp;                current = text.substring(first, last);</b>
+<b class="fc">&nbsp;                last++;</b>
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        out.add(current);</b>
+&nbsp;
+<b class="fc">&nbsp;        return out;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The crudeCenterAlign method pads a String based on a specified width using spaces.
+&nbsp;     * It&#39;s called crude due to unwieldiness.
+&nbsp;     *
+&nbsp;     * Note: When used with fonts that do not have a standard character width, this method doesn&#39;t function properly.
+&nbsp;     * @param str The given string to align to the center.
+&nbsp;     * @param maxwidth The amount of characters the output is allowed to take.
+&nbsp;     * @return A String
+&nbsp;     */
+&nbsp;    public static String crudeCenterAlign(String str, int maxwidth){
+<b class="fc">&nbsp;        return crudeCenterAlign(str, (maxwidth - str.length()) / 2, 0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    private static String crudeCenterAlign(String str, int mw, int dummy){
+<b class="fc">&nbsp;        if(mw &lt;= 0) return str;</b>
+<b class="fc">&nbsp;        return &quot; &quot; + crudeCenterAlign(str, mw - 1, 0);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-12 20:33</div>
+</div>
+</body>
+</html>

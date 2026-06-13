@@ -1,0 +1,441 @@
+
+
+
+<!DOCTYPE html>
+<html id="htmlId">
+<head>
+  <meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+  <title>Coverage Report > Card</title>
+  <style type="text/css">
+    @import "../../css/coverage.css";
+    @import "../../css/idea.min.css";
+  </style>
+  <script type="text/javascript" src="../../js/highlight.min.js"></script>
+  <script type="text/javascript" src="../../js/highlightjs-line-numbers.min.js"></script>
+</head>
+
+<body>
+<div class="content">
+<div class="breadCrumbs">
+Current scope:     <a href="../../index.html">all classes</a>
+    <span class="separator">|</span>
+    <a href="../index.html">main.java.CardEngineMain</a>
+</div>
+
+<h1>Coverage Summary for Class: Card (main.java.CardEngineMain)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">Card</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    65.2%
+  </span>
+  <span class="absValue">
+    (15/23)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    70.6%
+  </span>
+  <span class="absValue">
+    (96/136)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<pre>
+<code class="sourceCode" id="sourceCode">&nbsp;package main.java.CardEngineMain;
+&nbsp;
+&nbsp;import com.google.gson.Gson;
+&nbsp;import com.google.gson.GsonBuilder;
+&nbsp;
+&nbsp;import javax.imageio.ImageIO;
+&nbsp;import java.awt.*;
+&nbsp;import java.awt.image.BufferedImage;
+&nbsp;import java.io.File;
+&nbsp;import java.io.FileNotFoundException;
+&nbsp;import java.io.IOException;
+&nbsp;import java.io.PrintStream;
+&nbsp;import java.util.Arrays;
+&nbsp;import java.util.Scanner;
+&nbsp;
+&nbsp;import static main.java.CEUtils.FontUtils.loadFont;
+&nbsp;import static main.java.CEUtils.StringUtils.*;
+&nbsp;
+&nbsp;/**
+&nbsp; * The Card class represents an instance of a card. As well, it provides methods that assist in building, saving, and loading card data.
+&nbsp; */
+&nbsp;public class Card implements Comparable&lt;Card&gt;{
+&nbsp;    // Internal ID, Name, Type, Description, Attack, Starting Health, Blood
+<b class="fc">&nbsp;    private String[] data = new String[7];</b>
+&nbsp;
+&nbsp;    /*
+&nbsp;         Constructors
+&nbsp;    */
+&nbsp;
+<b class="fc">&nbsp;    public Card() {</b>
+<b class="fc">&nbsp;        this.data[0] = &quot;NULL&quot;; // Currently the internal identifier servers no useful distinction. It is only useful if a user wants to make the same card with a different name.</b>
+<b class="fc">&nbsp;        this.data[1] = &quot;Name&quot;;</b>
+<b class="fc">&nbsp;        this.data[2] = &quot;Type&quot;;</b>
+<b class="fc">&nbsp;        this.data[3] = &quot;Desc&quot;;</b>
+<b class="fc">&nbsp;        this.data[4] = &quot;0&quot;;</b>
+<b class="fc">&nbsp;        this.data[5] = &quot;0&quot;;</b>
+<b class="fc">&nbsp;        this.data[6] = &quot;0&quot;;</b>
+&nbsp;    }
+<b class="nc">&nbsp;    public Card(String id, String name, String type, String desc, int hp, int atk, int bld){</b>
+<b class="nc">&nbsp;        setData(id, name, type, desc, hp, atk, bld);</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;         Utilities
+&nbsp;    */
+&nbsp;
+&nbsp;    // https://www.youtube.com/watch?v=pJt-AYrmopo by Scott Rowell
+&nbsp;    // https://stackoverflow.com/questions/180158/how-do-i-time-a-methods-execution-in-java (response from Diastrophism)
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The saveCardData method stores the data in the Card Object into a .json file. Utilizes the Gson library.
+&nbsp;     */
+&nbsp;    public void saveCardData(){
+<b class="fc">&nbsp;        Gson jsonout = new GsonBuilder().setPrettyPrinting().create();</b>
+<b class="fc">&nbsp;        File f = new File(this.data[0] + &quot;.json&quot;);</b>
+&nbsp;        try {
+<b class="fc">&nbsp;            PrintStream output = new PrintStream(f);</b>
+<b class="fc">&nbsp;            String printout = jsonout.toJson(this);</b>
+&nbsp;
+<b class="fc">&nbsp;            output.println(printout);</b>
+<b class="fc">&nbsp;            IO.println(&quot;Trying to save to: &quot; + f.getAbsolutePath());</b>
+<b class="fc">&nbsp;            IO.println(&quot;&quot;);</b>
+&nbsp;        } catch (FileNotFoundException fnfe){
+<b class="nc">&nbsp;            IO.println(&quot;A FileNotFoundException has occurred.&quot;);</b>
+&nbsp;        }
+&nbsp;
+&nbsp;    }
+&nbsp;
+&nbsp;    // https://www.youtube.com/watch?v=J94lLj_uG3c by Random Code
+&nbsp;    /**
+&nbsp;     * The loadCardData method builds a Card Object from a .json file.
+&nbsp;     * @param file The file name to load the Card from.
+&nbsp;     * @return A Card
+&nbsp;     */
+&nbsp;    public static Card loadCardData(File file){
+<b class="fc">&nbsp;        String jsonin = &quot;&quot;;</b>
+&nbsp;        try{
+<b class="fc">&nbsp;            Scanner scan = new Scanner(file);</b>
+&nbsp;
+<b class="fc">&nbsp;            while(scan.hasNextLine()) {</b>
+<b class="fc">&nbsp;                jsonin = jsonin + scan.nextLine();</b>
+&nbsp;            }
+&nbsp;
+<b class="fc">&nbsp;            Gson gson = new Gson();</b>
+<b class="fc">&nbsp;            return gson.fromJson(jsonin, Card.class);</b>
+&nbsp;
+&nbsp;        }catch (FileNotFoundException fnf) {
+<b class="nc">&nbsp;            IO.println(&quot;A FileNotFoundException has occurred.&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The loadCardData method can alternatively be called using the Card&#39;s &lt;code&gt;identifier&lt;/code&gt; instead. Doing so will load the Card from the .json file of the same name.
+&nbsp;     * @param identifier The &lt;code&gt;identifier&lt;/code&gt; of the Card to load.
+&nbsp;     * @return A Card
+&nbsp;     */
+&nbsp;    public static Card loadCardData(String identifier){
+<b class="nc">&nbsp;        String jsonin = &quot;&quot;;</b>
+&nbsp;        try{
+<b class="nc">&nbsp;            Scanner scan = new Scanner(new File(identifier + &quot;.json&quot;));</b>
+&nbsp;
+<b class="nc">&nbsp;            while(scan.hasNextLine()) {</b>
+<b class="nc">&nbsp;                jsonin = jsonin + scan.nextLine();</b>
+&nbsp;            }
+&nbsp;
+<b class="nc">&nbsp;            Gson gson = new Gson();</b>
+<b class="nc">&nbsp;            return gson.fromJson(jsonin, Card.class);</b>
+&nbsp;
+&nbsp;        }catch (FileNotFoundException fnf) {
+<b class="nc">&nbsp;            IO.println(&quot;A FileNotFoundException has occurred.&quot;);</b>
+&nbsp;        }
+<b class="nc">&nbsp;        return null;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /**
+&nbsp;     * The buildCardImage method outputs an image file of the front face of the Card. The file will be named after the Card&#39;s &lt;code&gt;identifier&lt;/code&gt;.
+&nbsp;     * @param write Whether the method should write the BufferedImage to a .png file.
+&nbsp;     * @return A BufferedImage
+&nbsp;     */
+&nbsp;    // https://www.daniweb.com/programming/software-development/threads/382931/reading-images-faster
+&nbsp;    public BufferedImage buildCardImage(boolean write) {
+<b class="fc">&nbsp;        IO.println(&quot;Printing Card...&quot;);</b>
+<b class="fc">&nbsp;        IO.println(&quot;- - - - - - -&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        long st = System.nanoTime();</b>
+<b class="fc">&nbsp;        Graphics2D g2 = null;</b>
+<b class="fc">&nbsp;        BufferedImage bi = null;</b>
+<b class="fc">&nbsp;        Font b33 = loadFont(&quot;basis33.ttf&quot;, 1, 20f);</b>
+<b class="fc">&nbsp;        Font b2bs = loadFont(&quot;Born2bSportyV2.ttf&quot;, 1, 20f);</b>
+&nbsp;
+&nbsp;        /*
+&nbsp;            Note to self: using the internal resource folder is over 100x faster than reading from an online URL.
+&nbsp;         */
+&nbsp;        try {
+<b class="fc">&nbsp;            bi = ImageIO.read(getClass().getResource(&quot;/Images/CardFormatV1.png&quot;));</b>
+<b class="fc">&nbsp;            g2 = bi.createGraphics();</b>
+&nbsp;        } catch (IOException ioe) {
+<b class="nc">&nbsp;            IO.println(&quot;IOException has occurred&quot;);</b>
+&nbsp;        }
+<b class="fc">&nbsp;        long et = System.nanoTime();</b>
+<b class="fc">&nbsp;        IO.println(&quot;Init took: &quot; + ((et - st) / 100000) + &quot;ms&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        st = System.nanoTime();</b>
+&nbsp;        // https://chatgpt.com/share/6a2ca38f-7974-83e8-8481-db688831d17d
+&nbsp;        // Utilized ChatGPT to sus out the cause of a NullPointerException.
+&nbsp;        // No code was written with ChatGPT.
+<b class="fc">&nbsp;        g2.setFont(b33.deriveFont(45f));</b>
+<b class="fc">&nbsp;        g2.setColor(Color.WHITE);</b>
+<b class="fc">&nbsp;        for (int i = 0; i &lt; (textWrap(getDesc(), 31).size()); i++) {</b>
+<b class="fc">&nbsp;            g2.drawString(textWrap(getDesc(), 31).get(i), 235, 853 + (i * 45));</b>
+&nbsp;        }
+<b class="fc">&nbsp;        et = System.nanoTime();</b>
+<b class="fc">&nbsp;        IO.println(&quot;Desc took: &quot; + ((et - st) / 100000) + &quot;ms&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        st = System.nanoTime();</b>
+<b class="fc">&nbsp;        g2.setFont(b33.deriveFont(34f));</b>
+<b class="fc">&nbsp;        g2.drawString(crudeCenterAlign(getType(), 52), 110, 120);</b>
+<b class="fc">&nbsp;        et = System.nanoTime();</b>
+<b class="fc">&nbsp;        IO.println(&quot;Type took: &quot; + ((et - st) / 100000) + &quot;ms&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        st = System.nanoTime();</b>
+<b class="fc">&nbsp;        g2.setFont(b33.deriveFont(80f));</b>
+<b class="fc">&nbsp;        g2.drawString(crudeCenterAlign(getName(), 25), 74, 79);</b>
+<b class="fc">&nbsp;        et = System.nanoTime();</b>
+<b class="fc">&nbsp;        IO.println(&quot;Name took: &quot; + ((et - st) / 100000) + &quot;ms&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        st = System.nanoTime();</b>
+<b class="fc">&nbsp;        g2.setFont(b2bs.deriveFont(0,90f));</b>
+<b class="fc">&nbsp;        String stat = getHP() + &quot;&quot;;</b>
+<b class="fc">&nbsp;        g2.drawString(stat, 145 - ((stat.length() - 1) * 39), 940);</b>
+<b class="fc">&nbsp;        stat = getATK() + &quot;&quot;;</b>
+<b class="fc">&nbsp;        g2.drawString(stat, 145 - ((stat.length() - 1) * 39), 1105);</b>
+<b class="fc">&nbsp;        stat = getBLD() + &quot;&quot;;</b>
+<b class="fc">&nbsp;        g2.drawString(stat, 145 - ((stat.length() - 1) * 39), 1270);</b>
+<b class="fc">&nbsp;        et = System.nanoTime();</b>
+<b class="fc">&nbsp;        IO.println(&quot;Stats took: &quot; + ((et - st) / 100000) + &quot;ms&quot;);</b>
+<b class="fc">&nbsp;        IO.println(&quot;- - - - - - -&quot;);</b>
+<b class="fc">&nbsp;        IO.println(&quot;&quot;);</b>
+&nbsp;
+<b class="fc">&nbsp;        if(write) {</b>
+&nbsp;            try {
+<b class="nc">&nbsp;                ImageIO.write(bi, &quot;png&quot;, new File(getID() + &quot;.png&quot;));</b>
+&nbsp;            } catch (IOException ioe) {
+&nbsp;
+&nbsp;            }
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return bi;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;         Setters
+&nbsp;    */
+&nbsp;
+&nbsp;    public void setData(String id, String name, String type, String desc, int hp, int atk, int bld){
+<b class="fc">&nbsp;        this.data[0] = id;</b>
+<b class="fc">&nbsp;        this.data[1] = name;</b>
+<b class="fc">&nbsp;        this.data[2] = type;</b>
+<b class="fc">&nbsp;        this.data[3] = desc;</b>
+<b class="fc">&nbsp;        this.data[4] = hp + &quot;&quot;;</b>
+<b class="fc">&nbsp;        this.data[5] = atk + &quot;&quot;;</b>
+<b class="fc">&nbsp;        this.data[6] = bld + &quot;&quot;;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public void setName(String name){
+<b class="nc">&nbsp;        if(name == null){</b>
+<b class="nc">&nbsp;            this.data[1] = &quot;&quot;;</b>
+&nbsp;        } else{
+<b class="nc">&nbsp;            this.data[1] = name;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    public void setType(String type){
+<b class="nc">&nbsp;        if(type == null){</b>
+<b class="nc">&nbsp;            this.data[2] = &quot;&quot;;</b>
+&nbsp;        } else{
+<b class="nc">&nbsp;            this.data[2] = type;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    public void setDesc(String desc){
+<b class="nc">&nbsp;        if(desc == null){</b>
+<b class="nc">&nbsp;            this.data[3] = &quot;&quot;;</b>
+&nbsp;        } else{
+<b class="nc">&nbsp;            this.data[3] = desc;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    public void setHP(int hp){
+<b class="nc">&nbsp;        if(hp &gt; 0){</b>
+<b class="nc">&nbsp;            this.data[4] = &quot;&quot; + 0;</b>
+&nbsp;        } else{
+<b class="nc">&nbsp;            this.data[4] = &quot;&quot; + hp;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    public void setATK(int atk){
+<b class="nc">&nbsp;        if(atk &gt; 0){</b>
+<b class="nc">&nbsp;            this.data[5] = &quot;&quot; + 0;</b>
+&nbsp;        } else{
+<b class="nc">&nbsp;            this.data[5] = &quot;&quot; + atk;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;    public void setBLD(int bld){
+<b class="nc">&nbsp;        if(bld &gt; 0){</b>
+<b class="nc">&nbsp;            this.data[6] = &quot;&quot; + 0;</b>
+&nbsp;        } else{
+<b class="nc">&nbsp;            this.data[6] = &quot;&quot; + bld;</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    /*
+&nbsp;         Getters
+&nbsp;    */
+&nbsp;
+&nbsp;    public String[] getData(){
+<b class="fc">&nbsp;        String[] copyData = new String[7];</b>
+<b class="fc">&nbsp;        copyData[0] = this.data[0];</b>
+<b class="fc">&nbsp;        copyData[1] = this.data[1];</b>
+<b class="fc">&nbsp;        copyData[2] = this.data[2];</b>
+<b class="fc">&nbsp;        copyData[3] = this.data[3];</b>
+<b class="fc">&nbsp;        copyData[4] = this.data[4];</b>
+<b class="fc">&nbsp;        copyData[5] = this.data[5];</b>
+<b class="fc">&nbsp;        copyData[6] = this.data[6];</b>
+&nbsp;
+<b class="fc">&nbsp;        return copyData;</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    public String getID() {
+&nbsp;        //Check if the Identifier is Null
+<b class="fc">&nbsp;        if(this.data[0] == null || this.data[0].isEmpty()) {</b>
+<b class="nc">&nbsp;            return &quot;Null&quot;;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return this.data[0];</b>
+&nbsp;    }
+&nbsp;    public String getName() {
+&nbsp;        //Check if the Name is Null
+<b class="fc">&nbsp;        if(this.data[1] == null || this.data[1].isEmpty()) {</b>
+<b class="nc">&nbsp;            return &quot;Null&quot;;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return this.data[1];</b>
+&nbsp;    }
+&nbsp;    public String getType() {
+&nbsp;        //Check if the Type is Null
+<b class="fc">&nbsp;        if(this.data[2] == null || this.data[2].isEmpty()) {</b>
+<b class="nc">&nbsp;            return &quot;Null&quot;;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return this.data[2];</b>
+&nbsp;    }
+&nbsp;    public String getDesc() {
+&nbsp;        //Check if the Description is Null
+<b class="fc">&nbsp;        if(this.data[3] == null) {</b>
+<b class="nc">&nbsp;            return &quot;Null&quot;;</b>
+&nbsp;        }
+&nbsp;
+<b class="fc">&nbsp;        return this.data[3];</b>
+&nbsp;    }
+&nbsp;
+&nbsp;
+&nbsp;    /*
+&nbsp;     * The methods that grab the numerical stats return ints rather than Strings.
+&nbsp;     * This is for comparisons and math in the Deck Engine.
+&nbsp;     */
+&nbsp;    public int getHP(){
+<b class="fc">&nbsp;        if(this.data[4] == null || isInt(this.data[4]) || Integer.parseInt(this.data[4]) &lt; 0) {</b>
+<b class="nc">&nbsp;            return 0;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return Integer.parseInt(this.data[4]);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getATK(){
+<b class="fc">&nbsp;        if(this.data[5] == null || isInt(this.data[5]) || Integer.parseInt(this.data[5]) &lt; 0) {</b>
+<b class="nc">&nbsp;            return 0;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return Integer.parseInt(this.data[5]);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    public int getBLD(){
+<b class="fc">&nbsp;        if(this.data[6] == null || isInt(this.data[6]) || Integer.parseInt(this.data[6]) &lt; 0) {</b>
+<b class="nc">&nbsp;            return 0;</b>
+&nbsp;        } else {
+<b class="fc">&nbsp;            return Integer.parseInt(this.data[6]);</b>
+&nbsp;        }
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public int compareTo(Card o) {
+<b class="fc">&nbsp;        return this.getID().compareTo(o.getID());</b>
+&nbsp;    }
+&nbsp;
+&nbsp;    @Override
+&nbsp;    public String toString() {
+<b class="fc">&nbsp;        return Arrays.toString(this.getData());</b>
+&nbsp;    }
+&nbsp;}
+</code>
+</pre>
+</div>
+
+<script type="text/javascript">
+(function() {
+    var msie = false, msie9 = false;
+    /*@cc_on
+      msie = true;
+      @if (@_jscript_version >= 9)
+        msie9 = true;
+      @end
+    @*/
+
+    if (!msie || msie && msie9) {
+      hljs.highlightAll()
+      hljs.initLineNumbersOnLoad();
+    }
+})();
+</script>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2026-06-12 20:33</div>
+</div>
+</body>
+</html>
